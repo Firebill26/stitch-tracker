@@ -103,3 +103,12 @@ button.small { padding: 4px 8px; min-height: 30px; font-size: 12px; }
 .ge-fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(105px, 1fr)); gap: 8px; padding: 10px 12px calc(10px + var(--safe-b)); background: var(--surface); border-top: 1px solid var(--border); max-height: 34vh; overflow: auto; }
 .ge-fields label { display: flex; flex-direction: column; font-size: 12px; color: var(--muted); gap: 2px; }
 .ge-fields input { width: 100%; padding: 6px 8px; }
+
+/* help */
+.topbar .help-btn { width: 40px; padding: 0; border-radius: 50%; font-weight: 700; font-size: 18px; flex: none; }
+.help { position: fixed; inset: 0; z-index: 95; background: var(--bg); display: flex; flex-direction: column; }
+.help-body { flex: 1; overflow: auto; padding: 8px calc(18px + var(--safe-r)) calc(32px + var(--safe-b)) calc(18px + var(--safe-l)); max-width: 760px; width: 100%; margin: 0 auto; outline: none; }
+.help-body h2 { font-size: 18px; margin: 26px 0 6px; padding-top: 14px; border-top: 1px solid var(--border); }
+.help-body section:first-child h2 { border-top: 0; margin-top: 12px; }
+.help-body p, .help-body li { line-height: 1.5; }
+.help-body li { margin: 4px 0; }

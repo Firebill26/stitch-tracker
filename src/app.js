@@ -5,6 +5,7 @@ import { assignViews, paintOrder, extent } from './layout.js';
 import { Viewer, TILE_CELL } from './viewer.js';
 import { openGridEditor, bindGridFields, rebox, FIELD_DEFS } from './gridEditor.js';
 import { h, toast, confirmDialog, textDialog } from './ui.js';
+import { helpButton } from './help.js';
 
 const app = document.getElementById('app');
 let current = null; // cleanup for the active screen
@@ -25,7 +26,7 @@ async function libraryScreen() {
 
   const top = h('div', { class: 'topbar' },
     h('h1', {}, 'My Patterns'),
-    h('button', { class: 'primary', onclick: () => fileInput.click() }, '+ Add pattern (PDF)'), fileInput);
+    h('button', { class: 'primary', onclick: () => fileInput.click() }, '+ Add pattern (PDF)'), fileInput, helpButton());
 
   const body = h('div', { class: 'scroll' });
   const urls = [];
@@ -94,7 +95,7 @@ async function importScreen(file, existing = null) {
   const buildBtn = h('button', { class: 'primary', disabled: true }, existing ? 'Save changes' : 'Build pattern');
 
   app.append(
-    h('div', { class: 'topbar' }, h('button', { onclick: () => show(existing ? () => stitchScreen(existing.id) : libraryScreen) }, '← Cancel'), h('h1', {}, existing ? 'Edit pattern' : 'Add pattern')),
+    h('div', { class: 'topbar' }, h('button', { onclick: () => show(existing ? () => stitchScreen(existing.id) : libraryScreen) }, '← Cancel'), h('h1', {}, existing ? 'Edit pattern' : 'Add pattern'), helpButton()),
     h('div', { class: 'scroll import' },
       h('p', { class: 'hint' }, 'Tick the pages that contain the chart (skip the cover and legend). Pages are placed using the row and column numbers printed on them, so overlap strips line up automatically. Tap a page picture to enlarge it and adjust the grid by hand.'),
       h('div', { class: 'row' },
@@ -392,7 +393,7 @@ async function stitchScreen(id) {
   app.append(
     h('div', { class: 'topbar' },
       h('button', { onclick: async () => { await save(); show(libraryScreen); } }, '← Patterns'),
-      h('h1', {}, pattern.name), stat, modeBtn, viewBtn, undoBtn),
+      h('h1', {}, pattern.name), stat, modeBtn, viewBtn, undoBtn, helpButton()),
     h('div', { class: 'stage' }, canvas, legend,
       h('div', { class: 'zoom' },
         h('button', { 'aria-label': 'Zoom in', onclick: () => viewer.zoomBy(1.5) }, '+'),

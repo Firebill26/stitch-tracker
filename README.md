@@ -34,6 +34,9 @@ The app must be served over HTTPS to install and work offline. Easiest: publish 
 
 Progress saves automatically (a moment after each change, and when you leave the app).
 
+## Help inside the app
+The round **?** button at the top right of every screen opens the full instructions (`src/help.js`). Keep it in step with the app when features change.
+
 ## Docs
 - [docs/DESIGN.md](docs/DESIGN.md): how it works, the PDF format findings, decisions.
 - [docs/CHANGELOG.md](docs/CHANGELOG.md)
@@ -47,6 +50,7 @@ src/analyze.js   finds the stitch grid and absolute row/column numbers on a PDF 
 src/layout.js    page placement, overlap ownership, chart "views"
 src/gridEditor.js full-screen manual grid editor
 src/ui.js        DOM helpers + in-app dialogs
+src/help.js      the ? help page
 src/pdfio.js     pdf.js wrapper (render a page region so its grid lands where we want)
 src/viewer.js    canvas viewer: pan, zoom, progress overlay, gestures
 src/storage.js   IndexedDB persistence (swap this for cloud sync later)

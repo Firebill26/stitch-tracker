@@ -1,9 +1,9 @@
 // Caches the app shell so the app opens offline. Bump VERSION when files change.
-const VERSION = 'v3';
+const VERSION = 'v4';
 const CACHE = `stitch-tracker-${VERSION}`;
 const SHELL = [
   './', 'index.html', 'styles.css', 'manifest.webmanifest',
-  'src/app.js', 'src/ui.js', 'src/gridEditor.js', 'src/analyze.js', 'src/layout.js', 'src/pdfio.js', 'src/storage.js', 'src/viewer.js',
+  'src/app.js', 'src/ui.js', 'src/help.js', 'src/gridEditor.js', 'src/analyze.js', 'src/layout.js', 'src/pdfio.js', 'src/storage.js', 'src/viewer.js',
   'vendor/pdf.min.mjs', 'vendor/pdf.worker.min.mjs',
   'icons/icon-180.png', 'icons/icon-192.png', 'icons/icon-512.png',
 ];

@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2026-11-06
+- **Help page**: a round ? button at the top right of every screen (pattern list, add/edit pattern, stitching) opens a full-screen, scrollable how-to covering adding patterns, line numbers, the grid editor, gestures, tap mode, undo, views, saving and troubleshooting. Text lives in `src/help.js`: update it when behaviour changes.
 - Published to GitHub Pages: https://firebill26.github.io/stitch-tracker/ (public repo `Firebill26/stitch-tracker`; PDFs are git-ignored).
 - **Line-number rulers** along the top and left of the stitched pattern view (0 = left/top edge of the chart, spacing adapts to zoom). They stay on the border while you pan and zoom, and taps on them do not mark stitches.
 - **Bowser Baddies was cut off on the right/bottom.** The PDF text says 358x410 stitches, but its pages cover a **411 x 461** grid: the 358x410 stitches sit inside blank margins (stitches run from line 24/25 to 382/433). Import now sizes the pattern to the largest of the printed size, the furthest drawn stitch and the full area the chart pages cover, and says so on the import screen. The size fields stay editable. To fix a pattern built earlier: Edit it (size is pre-filled with the corrected value; this clears stitches).
