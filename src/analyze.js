@@ -24,6 +24,16 @@ function mode(values, tol) {
 /** Walks a pdf.js constructPath op into line segments and rectangles. */
 function* shapes(args, OPS) {
   const [ops, c] = args;
+  // Some generators draw filled bands (e.g. shaded overlap strips) as a 4-corner polygon instead of a rectangle.
+  if (ops.length >= 4 && ops[0] === OPS.moveTo && ops[1] === OPS.lineTo && ops[2] === OPS.lineTo && ops[3] === OPS.lineTo &&
+      (ops.length === 4 || (ops.length === 5 && ops[4] === OPS.closePath))) {
+    const xs = [c[0], c[2], c[4], c[6]], ys = [c[1], c[3], c[5], c[7]];
+    const ux = new Set(xs.map((v) => v.toFixed(2))), uy = new Set(ys.map((v) => v.toFixed(2)));
+    if (ux.size === 2 && uy.size === 2) {
+      const x = Math.min(...xs), y = Math.min(...ys);
+      yield { rect: [x, y, Math.max(...xs) - x, Math.max(...ys) - y], poly: true };
+    }
+  }
   let p = 0, cx = 0, cy = 0, sx = 0, sy = 0;
   for (const op of ops) {
     if (op === OPS.moveTo) { cx = sx = c[p++]; cy = sy = c[p++]; }
@@ -97,7 +107,12 @@ export async function analyzePage(page, OPS) {
     if (f === OPS.setFillRGBColor) { fill = ops.argsArray[i]; continue; }
     if (f !== OPS.constructPath) continue;
     for (const s of shapes(ops.argsArray[i], OPS)) {
-      if (s.rect) {
+      if (s.rect && s.poly) {
+        // Polygon "rectangles" only count as big shapes (overlap strips, grid box), never as stitch cells.
+        const [x, y, w, h] = s.rect;
+        if (w > pitch * 3 || h > pitch * 3) bigRects.push({ x, y, w, h });
+        if (!printed && count === 0 && w > pitch * 20 && h > pitch * 20 && w < pageW * 0.95 && h < pageH * 0.95) printed = { x, y, w, h };
+      } else if (s.rect) {
         const [x, y, w, h] = s.rect;
         if (Math.abs(w - pitch) <= pitch * 0.05 && Math.abs(h - pitch) <= pitch * 0.05) {
           count++;

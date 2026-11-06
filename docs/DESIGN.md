@@ -26,6 +26,7 @@ Living document. Update it as the app changes.
 |---|---|---|
 | BowserBaddies.pdf | filled cell squares (pages 2-10) **and** a second, symbols-only copy drawn with grid lines (pages 11-19) | 18 chart pages = two *views* of one 358x410 chart. Overlap 2 cells, shaded translucent blue. |
 | mariosamplercolor.pdf | drawn grid lines, landscape, axis numbers rotated for rows | 6 chart pages (2x3), 151x132. Overlap strips (3 rows/cols) shaded grey and drawn *outside* the grid lines. Page 9 is the legend. |
+| ZeldaInventorycolor.pdf | same generator as Mario Sampler (drawn lines, grey strips as filled polygons) | 8 chart pages (4x2), 3-line overlaps, printed 212x173 but pages cover 214x175. Page 9 is the legend. |
 | ghosts-pattern.pdf | raster/outlined drawing, **no text** | Cannot be read automatically (no axis numbers). Use the manual grid editor; PDF page 5 holds two chart pages stacked, so use "+ Another grid on this page". |
 
 ## Views
