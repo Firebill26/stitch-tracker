@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2026-11-06
+- Published to GitHub Pages: https://firebill26.github.io/stich-tracker/ (public repo `Firebill26/stich-tracker`; PDFs are git-ignored).
 - **Line-number rulers** along the top and left of the stitched pattern view (0 = left/top edge of the chart, spacing adapts to zoom). They stay on the border while you pan and zoom, and taps on them do not mark stitches.
 - **Bowser Baddies was cut off on the right/bottom.** The PDF text says 358x410 stitches, but its pages cover a **411 x 461** grid: the 358x410 stitches sit inside blank margins (stitches run from line 24/25 to 382/433). Import now sizes the pattern to the largest of the printed size, the furthest drawn stitch and the full area the chart pages cover, and says so on the import screen. The size fields stay editable. To fix a pattern built earlier: Edit it (size is pre-filled with the corrected value; this clears stitches).
 - **Edit pattern**: new Edit button on each pattern card in the pattern list (not on the stitching screen). After a warning that all stitch markings will be cleared, it reopens the page/grid setup pre-filled with the saved layout so misalignments can be fixed; Save changes rebuilds the pattern (same name and PDF) with empty progress. Cancel keeps everything.

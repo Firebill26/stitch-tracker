@@ -10,6 +10,9 @@ node serve.mjs
 
 Open http://localhost:8080. No install or build step (Node 18+ only runs the tiny static server).
 
+### Hosted copy
+Live at https://firebill26.github.io/stich-tracker/ (GitHub Pages, served from the `main` branch). To publish changes: `git add . && git commit -m "update" && git push`; the site refreshes in about a minute. PDFs (`patterns/`, `*.pdf`) are git-ignored on purpose: the patterns are other designers' work and the repo is public.
+
 ### On an iPhone / iPad
 The app must be served over HTTPS to install and work offline. Easiest: publish this folder to any static host (GitHub Pages, Netlify, Cloudflare Pages), open the URL in Safari, then Share > Add to Home Screen. Data stays in that browser/device. For a quick look on your home network, `node serve.mjs` and browse to `http://<your-pc-ip>:8080` (works, but no offline install).
 
