@@ -29,7 +29,6 @@ async function libraryScreen() {
     h('button', { class: 'primary', onclick: () => fileInput.click() }, '+ Add pattern (PDF)'), fileInput, helpButton());
 
   const body = h('div', { class: 'scroll' });
-  const urls = [];
   if (!patterns.length) {
     body.append(h('div', { class: 'empty' },
       h('h2', {}, 'No patterns yet'),
@@ -38,7 +37,7 @@ async function libraryScreen() {
     body.append(h('div', { class: 'cards' }, patterns.map((p) => {
       const pct = p.total ? Math.round(((p.done || 0) / p.total) * 100) : 0;
       const thumb = h('div', { class: 'thumb' });
-      if (p.thumb) { const u = URL.createObjectURL(p.thumb); urls.push(u); thumb.style.backgroundImage = `url(${u})`; }
+      thumbFor(p).then((u) => { if (u) thumb.style.backgroundImage = `url("${u}")`; });
       return h('div', { class: 'card', onclick: () => show(() => stitchScreen(p.id)) },
         thumb,
         h('div', { class: 'meta' },
@@ -67,7 +66,38 @@ async function libraryScreen() {
     })));
   }
   app.append(top, body);
-  return () => urls.forEach(URL.revokeObjectURL);
+}
+
+/**
+ * The card picture as a data URL string. Older patterns kept it as a Blob inside IndexedDB, which
+ * iOS Safari sometimes fails to load later, so convert it once (or rebuild it from the page images)
+ * and store the string instead.
+ */
+const thumbJobs = new Map();
+function thumbFor(p) {
+  if (p.thumbData) return Promise.resolve(p.thumbData);
+  if (!thumbJobs.has(p.id)) {
+    thumbJobs.set(p.id, (async () => {
+      let url = '';
+      try {
+        if (p.thumb) url = await new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.onerror = () => rej(fr.error); fr.readAsDataURL(p.thumb); });
+        if (!url.startsWith('data:image')) url = '';
+      } catch { url = ''; }
+      if (!url) {
+        try {
+          const blobs = await Promise.all(p.pages.map((_, n) => store.getTile(p.id, n)));
+          url = await makeThumb(p.pages, blobs, p.width, p.height);
+        } catch { url = ''; }
+      }
+      if (url) {
+        p.thumbData = url; p.thumb = null;
+        try { await store.savePattern(p); } catch { /* picture still shows this time */ }
+      }
+      thumbJobs.delete(p.id);
+      return url;
+    })());
+  }
+  return thumbJobs.get(p.id);
 }
 
 /** Warns that editing wipes progress, then reopens the grid setup for an already-built pattern. */
@@ -297,7 +327,8 @@ async function importScreen(file, existing = null) {
         ...(existing || {}),
         id: existing ? existing.id : store.newId(), name: nameIn.value.trim() || 'Untitled', createdAt: Date.now(), openedAt: Date.now(),
         width, height, pages, views, lastView: 0, done: 0, half: 0, total: width * height,
-        thumb: await makeThumb(pages, tiles, width, height),
+        thumb: null,
+        thumbData: await makeThumb(pages, tiles, width, height),
       };
       if (existing) await store.replacePattern(pattern, tiles);
       else await store.createPattern(pattern, file, tiles);
@@ -323,7 +354,7 @@ async function makeThumb(pages, tileBlobs, width, height) {
     ctx.drawImage(bmp, (p.colStart - 1) * k, (p.rowStart - 1) * k, p.cols * k, p.rows * k);
     bmp.close();
   }
-  return new Promise((r) => c.toBlob(r, 'image/jpeg', 0.8));
+  return c.toDataURL('image/jpeg', 0.8);
 }
 
 // ---------------------------------------------------------------- stitching

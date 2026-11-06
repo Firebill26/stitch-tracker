@@ -1,6 +1,8 @@
 # Changelog
 
 ## 2026-11-06
+- **Pattern card pictures sometimes missing** after going in and out of a pattern (seen on iOS). The picture was stored as a Blob in IndexedDB and shown through a temporary object URL, which Safari can fail to load. It is now stored as a plain data-URL string (`thumbData`). Older patterns are converted automatically the first time the list is shown (or rebuilt from the page images if the old blob can no longer be read).
+- **Reload app** button at the bottom of the help page (installed iPhone/iPad web apps have no refresh control). It checks for a new version, then reloads; patterns and progress are kept.
 - **Help page**: a round ? button at the top right of every screen (pattern list, add/edit pattern, stitching) opens a full-screen, scrollable how-to covering adding patterns, line numbers, the grid editor, gestures, tap mode, undo, views, saving and troubleshooting. Text lives in `src/help.js`: update it when behaviour changes.
 - Published to GitHub Pages: https://firebill26.github.io/stitch-tracker/ (public repo `Firebill26/stitch-tracker`; PDFs are git-ignored).
 - **Line-number rulers** along the top and left of the stitched pattern view (0 = left/top edge of the chart, spacing adapts to zoom). They stay on the border while you pan and zoom, and taps on them do not mark stitches.

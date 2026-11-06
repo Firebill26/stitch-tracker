@@ -52,7 +52,7 @@ Tap a page picture on the import screen. The page opens full screen with the gri
 
 ## Data model
 
-- `patterns`: `{id, name, createdAt, openedAt, width, height, views[], lastView, pages[{pdfPage, view, colStart, rowStart, cols, rows, pitchX, pitchY, x0, yTop}], done, half, total, thumb}`
+- `patterns`: `{id, name, createdAt, openedAt, width, height, views[], lastView, thumbData (JPEG data URL), pages[{pdfPage, view, colStart, rowStart, cols, rows, pitchX, pitchY, x0, yTop}], done, half, total, thumb}`
 - `files`: original PDF. `tiles`: page PNGs. `progress`: `Uint8Array(width*height)`, 0 none / 1 half / 2 full, row-major.
 - Saved 400 ms after a change, on `visibilitychange` (hidden), `pagehide`, and when leaving the screen.
 

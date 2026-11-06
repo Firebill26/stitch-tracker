@@ -84,7 +84,7 @@ const SECTIONS = [
       'Pages do not line up: tap a page picture and check the line numbers match the numbers printed on the chart. If a pattern is already built, use Edit on its card to fix it (this clears your stitches).',
       'The chart looks blurry while zooming: it sharpens a moment after you stop moving.',
       'Part of the chart is cut off: Edit the pattern and make Width / Height larger.',
-      'Not seeing the latest version of the app: reload the page, or close the Home Screen app completely and reopen it.',
+      'A picture or screen looks wrong, or you are not seeing the latest version: tap Reload app below (installed iPhone/iPad apps have no refresh control).',
     ]],
   ]],
 ];
@@ -94,6 +94,12 @@ function render([kind, body]) {
   return h(kind, {}, body.map((t) => h('li', {}, t)));
 }
 
+/** Reloads the app, first asking the service worker to look for a newer version. */
+async function reloadApp() {
+  try { const regs = await navigator.serviceWorker?.getRegistrations(); await Promise.all((regs || []).map((r) => r.update())); } catch { /* offline: just reload */ }
+  location.reload();
+}
+
 /** Opens the help page over the current screen. */
 export function openHelp() {
   const close = () => { root.remove(); document.removeEventListener('keydown', onKey); };
@@ -101,7 +107,10 @@ export function openHelp() {
   const root = h('div', { class: 'help', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'Help' },
     h('div', { class: 'topbar' }, h('h1', {}, 'How to use Stitch Tracker'), h('button', { class: 'primary', onclick: close }, 'Close')),
     h('div', { class: 'help-body', tabindex: '-1' },
-      SECTIONS.map(([title, blocks]) => h('section', {}, h('h2', {}, title), blocks.map(render)))));
+      SECTIONS.map(([title, blocks]) => h('section', {}, h('h2', {}, title), blocks.map(render))),
+      h('section', {}, h('h2', {}, 'Reload the app'),
+        h('p', {}, 'Reloads the app to pick up updates or clear a glitch. Your patterns and progress are kept.'),
+        h('button', { class: 'primary', onclick: reloadApp }, 'Reload app'))));
   document.addEventListener('keydown', onKey);
   document.body.append(root);
   root.querySelector('.help-body').focus();
